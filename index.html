@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white flex items-center justify-center h-screen">
+
+  <div class="bg-gray-800 p-8 rounded-2xl shadow-xl w-96">
+    <h1 class="text-2xl mb-4 font-bold text-center">Baixar Reels</h1>
+
+    <input id="url" class="w-full p-3 rounded bg-gray-700 border border-gray-600" placeholder="Cole o link do Reels">
+
+    <button onclick="baixar()" class="mt-4 w-full bg-blue-600 hover:bg-blue-700 p-3 rounded-xl">
+      Baixar
+    </button>
+
+    <div id="status" class="mt-4 text-center"></div>
+  </div>
+
+  <script>
+    async function baixar() {
+      const url = document.getElementById("url").value;
+      const status = document.getElementById("status");
+
+      status.innerHTML = "Buscando vídeo...";
+
+      const res = await fetch("https://instaafferre.onrender.com/api/download", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url })
+      });
+
+      const data = await res.json();
+
+      if (!data.videoUrl) {
+        status.innerHTML = "Erro ao extrair vídeo.";
+        return;
+      }
+
+      status.innerHTML = "Baixando...";
+
+      // inicia download
+      const a = document.createElement("a");
+      a.href = data.videoUrl;
+      a.download = "reels.mp4";
+      a.click();
+
+      status.innerHTML = "Download iniciado!";
+    }
+  </script>
+
+</body>
+</html>
