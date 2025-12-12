@@ -7,6 +7,10 @@
   <title>instaAfferre</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="shortcut icon" href="assets/logo.png" type="image/x-icon">
+
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#121212">
+
 </head>
 
 <body class="bg-gray-900 text-white flex items-center justify-center h-screen">
@@ -24,6 +28,22 @@
   </div>
 
   <script>
+
+    const btnDownload = document.querySelector("button");
+
+    let inputUrl = document.getElementById("url");
+    
+    inputUrl.addEventListener("input", () => {
+      if (inputUrl.value.length < 3) {
+        btnDownload.disabled = true;
+        btnDownload.classList.add("opacity-50");
+      } else {
+        btnDownload.disabled = false;
+        btnDownload.classList.remove("opacity-50");
+      }
+    });
+ 
+
     async function baixar() {
       const url = document.getElementById("url").value;
       const status = document.getElementById("status");
@@ -59,7 +79,19 @@
 
   <!-- Cloudflare Web Analytics -->
   <script defer src='https://static.cloudflareinsights.com/beacon.min.js'
-    data-cf-beacon='{"token": "9534df6763594dd5993930b75df6e5ac"}'></script><!-- End Cloudflare Web Analytics -->
+    data-cf-beacon='{"token": "9534df6763594dd5993930b75df6e5ac"}'></script>
+    
+    <!-- End Cloudflare Web Analytics -->
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("service-worker.js")
+        .then(() => console.log("SW registrado"))
+        .catch(err => console.error("Erro ao registrar SW:", err));
+    }
+  </script>
+
+
 </body>
 
 </html>
