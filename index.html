@@ -2,95 +2,225 @@
 <html lang="pt-BR">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>instaAfferre</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="shortcut icon" href="assets/logo.png" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>instaAfferre</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="shortcut icon" href="assets/logo.png" type="image/x-icon">
 
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#121212">
-
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#121212">
 </head>
 
-<body class="bg-gray-900 text-white flex items-center justify-center h-screen">
+<body class="bg-gray-900 text-white min-h-screen flex flex-col min-w-[300px]">
 
-  <div class="bg-gray-800 p-8 rounded-2xl shadow-xl w-96">
-    <h1 class="text-2xl mb-4 font-bold text-center">Baixar Reels</h1>
+    <!-- NAV -->
+    <nav class="w-full bg-pink-800 h-14 md:h-16 flex items-center justify-between px-4">
+        <div class="flex items-center gap-2">
+            <img src="assets/logo.png" alt="logo" class="w-8 md:w-10">
+            <h1 class="font-semibold text-md md:text-xl">instaafferre</h1>
+        </div>
 
-    <input id="url" class="w-full p-3 rounded bg-gray-700 border border-gray-600" placeholder="Cole o link do Reels">
+        <!-- Ícone moedas -->
+        <button id="supportBtn" onclick="openModal()" class="flex items-center gap-1 transition"
+            title="Apoie o projeto">
+            <span id="coinIcon" class="text-yellow-400 text-3xl">💰</span>
+        </button>
+    </nav>
 
-    <button onclick="baixar()" class="mt-4 w-full bg-blue-600 hover:bg-blue-700 p-3 rounded-xl">
-      Baixar
-    </button>
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="flex-1 flex items-center justify-center px-4">
+        <div class="bg-gray-800 p-8 rounded-2xl shadow-xl w-full max-w-sm">
+            <h1 class="text-2xl mb-4 font-bold text-center">Baixar Reels</h1>
+            <input autofocus id="url" class="w-full p-3 rounded bg-gray-700 border border-gray-600"
+                placeholder="Cole o link do Reels">
+            <button onclick="baixar()"
+                class="mt-4 w-full bg-blue-600 hover:bg-blue-700 p-3 rounded-xl transition opacity-20" disabled>
+                Baixar
+            </button>
+            <div id="status" class="mt-4 text-center"></div>
+        </div>
+    </main>
 
-    <div id="status" class="mt-4 text-center"></div>
-  </div>
-
-  <script>
-
-    const btnDownload = document.querySelector("button");
-
-    let inputUrl = document.getElementById("url");
-    
-    inputUrl.addEventListener("input", () => {
-      if (inputUrl.value.length < 3) {
-        btnDownload.disabled = true;
-        btnDownload.classList.add("opacity-50");
-      } else {
-        btnDownload.disabled = false;
-        btnDownload.classList.remove("opacity-50");
-      }
-    });
- 
-
-    async function baixar() {
-      const url = document.getElementById("url").value;
-      const status = document.getElementById("status");
-
-      status.innerHTML = "Buscando vídeo...";
-
-      const res = await fetch("https://instaafferre.onrender.com/api/download", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url })
-      });
-
-      const data = await res.json();
-
-      if (!data.videoUrl) {
-        status.innerHTML = "Erro ao extrair vídeo.";
-        return;
-      }
-
-      status.innerHTML = "Baixando...";
-
-      // inicia download
-      const a = document.createElement("a");
-      a.href = data.videoUrl;
-      a.download = "reels.mp4";
-      a.click();
-
-      status.innerHTML = "Download iniciado!";
-    }
-  </script>
+    <!-- FOOTER -->
+    <footer class="w-full bg-neutral-900 py-4 flex justify-center">
+        <a href="https://perfil-react-theta.vercel.app/" class="text-xs text-neutral-400 hover:text-white transition">
+            © 2025 • Desenvolvido por <span class="font-semibold">wellservice</span>
+        </a>
+    </footer>
 
 
+    <!-- MODAL APOIO -->
+    <div id="modal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50">
+        <div class="bg-gray-800 rounded-2xl p-6 w-full max-w-sm shadow-xl">
+            <h2 class="text-xl font-bold mb-2 text-center">Apoie o projeto ❤️</h2>
+            <p class="text-sm text-gray-300 mb-4 text-center">
+                Se este app te ajudou, considere apoiar com uma contribuição.
+            </p>
 
-  <!-- Cloudflare Web Analytics -->
-  <script defer src='https://static.cloudflareinsights.com/beacon.min.js'
-    data-cf-beacon='{"token": "9534df6763594dd5993930b75df6e5ac"}'></script>
-    
-    <!-- End Cloudflare Web Analytics -->
+            <div class="bg-gray-900 rounded-lg p-3 text-sm text-center break-all mb-4" id="pixKey">
+                CHAVE-DE-PAGAMENTO-EXEMPLO-123456
+            </div>
 
-  <script>
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("service-worker.js")
-        .then(() => console.log("SW registrado"))
-        .catch(err => console.error("Erro ao registrar SW:", err));
-    }
-  </script>
+            <button onclick="copyKey()" class="w-full bg-green-600 hover:bg-green-700 p-2 rounded-lg mb-2 transition">
+                Copiar chave
+            </button>
 
+            <button onclick="closeModal()" class="w-full bg-gray-700 hover:bg-gray-600 p-2 rounded-lg transition">
+                Fechar
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL INSTALAR APP -->
+    <div id="installModal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50">
+        <div class="bg-gray-800 rounded-2xl p-6 w-full max-w-sm shadow-xl">
+            <h2 class="text-xl font-bold mb-2 text-center">Instalar InstaAfferre 📲</h2>
+
+            <p class="text-sm text-gray-300 mb-4 text-center">
+                Adicione o InstaAfferre à sua tela inicial para acesso rápido, como um app.
+            </p>
+
+            <button id="installConfirmBtn" class="w-full bg-blue-600 hover:bg-blue-700 p-2 rounded-lg mb-2 transition">
+                Instalar agora
+            </button>
+
+            <button onclick="closeInstallModal()"
+                class="w-full bg-gray-700 hover:bg-gray-600 p-2 rounded-lg transition">
+                Agora não
+            </button>
+        </div>
+    </div>
+
+
+    <script>
+        const btnDownload = document.querySelector("main button");
+        let inputUrl = document.getElementById("url");
+
+        inputUrl.addEventListener("input", () => {
+            if (inputUrl.value.length < 3) {
+                btnDownload.disabled = true;
+                btnDownload.classList.add("opacity-20");
+            } else {
+                btnDownload.disabled = false;
+                btnDownload.classList.remove("opacity-20");
+            }
+        });
+
+        async function baixar() {
+            const url = document.getElementById("url").value;
+            const status = document.getElementById("status");
+
+            status.innerHTML = "Buscando vídeo...";
+
+            const res = await fetch("https://instaafferre.onrender.com/api/download", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ url })
+            });
+
+            const data = await res.json();
+
+            if (!data.videoUrl) {
+                status.innerHTML = "Erro ao extrair vídeo.";
+                return;
+            }
+
+            status.innerHTML = "Baixando...";
+
+            const a = document.createElement("a");
+            a.href = data.videoUrl;
+            a.download = "reels.mp4";
+            a.click();
+
+            status.innerHTML = "Download iniciado!";
+        }
+
+        function openModal() {
+            document.getElementById('modal').classList.remove('hidden');
+            document.getElementById('modal').classList.add('flex');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.add('hidden');
+            document.getElementById('modal').classList.remove('flex');
+        }
+
+        function copyKey() {
+            const key = document.getElementById('pixKey').innerText;
+            navigator.clipboard.writeText(key);
+            alert('Chave copiada!');
+        }
+
+        // animação do ícone de apoio (delay 3s)
+        const coinIcon = document.getElementById('coinIcon');
+        setTimeout(() => {
+            coinIcon.classList.add('animate-bounce');
+            setTimeout(() => coinIcon.classList.remove('animate-bounce'), 1450);
+        }, 2000);
+    </script>
+
+    <script>
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("service-worker.js")
+                .then(() => console.log("SW registrado"))
+                .catch(err => console.error("Erro ao registrar SW:", err));
+        }
+
+
+
+
+
+        // Adicionar a tela inicial do celular lógica para aparecer automáticamente
+
+        let deferredPrompt;
+
+        const installModal = document.getElementById('installModal');
+        const installConfirmBtn = document.getElementById('installConfirmBtn');
+
+        // Captura o evento de instalação
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+
+            // Pequeno delay para não ser invasivo
+            setTimeout(() => {
+                installModal.classList.remove('hidden');
+                installModal.classList.add('flex');
+            }, 5500);
+        });
+
+        installConfirmBtn.addEventListener('click', async () => {
+            if (!deferredPrompt) return;
+
+            deferredPrompt.prompt();
+
+            const { outcome } = await deferredPrompt.userChoice;
+            console.log('Resultado da instalação:', outcome);
+
+            deferredPrompt = null;
+            closeInstallModal();
+        });
+
+        function closeInstallModal() {
+            installModal.classList.add('hidden');
+            installModal.classList.remove('flex');
+        }
+
+        // Caso o app já tenha sido instalado
+        window.addEventListener('appinstalled', () => {
+            closeInstallModal();
+            console.log('PWA instalado 🎉');
+        });
+
+
+        //Focar no input ao carregar a página
+        setTimeout(() => {
+            document.getElementById('url')?.focus();
+        }, 300);
+
+
+    </script>
 
 </body>
 
