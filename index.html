@@ -62,7 +62,7 @@
                 75a3482e-591b-4e04-8152-f2f8bbd4f722
             </div>
 
-            <button onclick="copyKey()" class="w-full bg-green-600 hover:bg-green-700 p-2 rounded-lg mb-2 transition">
+            <button onclick="copyKey()" id="copyKeyBtn" class="w-full bg-green-600 hover:bg-green-700 p-2 rounded-lg mb-2 transition">
                 Copiar chave
             </button>
 
@@ -184,7 +184,12 @@
         function copyKey() {
             const key = document.getElementById('pixKey').innerText;
             navigator.clipboard.writeText(key);
-            alert('Chave copiada!');
+            let messageCopyBtn = document.getElementById('copyKeyBtn');
+            messageCopyBtn.innerHTML = 'Chave Pix Copiada!';
+            setTimeout(() => {
+                messageCopyBtn.innerHTML = 'Copiar chave';
+            }, 3000);
+            
         }
 
         // animação do ícone de apoio (delay 3s)
@@ -258,6 +263,19 @@
         data-cf-beacon='{"token": "9534df6763594dd5993930b75df6e5ac"}'>
         </script>
     <!-- End Cloudflare Web Analytics -->
+
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5241292154806483"
+     crossorigin="anonymous"></script>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-format="fluid"
+         data-ad-layout-key="-f2-x5-4j-6h"
+         data-ad-client="ca-pub-5241292154806483"
+         data-ad-slot="1656622561"></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
 </body>
 
 </html>
