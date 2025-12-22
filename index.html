@@ -122,7 +122,7 @@
             }
         }
 
-     
+
 
         async function baixar() {
             const url = document.getElementById("url").value;
@@ -130,27 +130,45 @@
 
             status.innerHTML = "Buscando vídeo...";
 
-            const res = await fetch("https://instaafferre.onrender.com/api/download", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ url })
-            });
+            try {
+                const res = await fetch(
+                    "https://instaafferre.onrender.com/api/download",
+                    {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ url }),
+                    }
+                );
 
-            const data = await res.json();
+                if (!res.ok) {
+                    throw new Error("Falha ao baixar o vídeo");
+                }
 
-            if (!data.videoUrl) {
-                status.innerHTML = "Erro ao extrair vídeo.";
-                return;
+                status.innerHTML = "Preparando download...";
+
+                // 🔥 PEÇA CHAVE: ler como blob
+                const blob = await res.blob();
+
+                // 🔥 Criar URL temporária
+                const downloadUrl = URL.createObjectURL(blob);
+
+                // 🔥 Disparar download
+                const a = document.createElement("a");
+                a.href = downloadUrl;
+                a.download = "reels.mp4";
+                document.body.appendChild(a);
+                a.click();
+
+                // 🔥 Limpeza
+                a.remove();
+                URL.revokeObjectURL(downloadUrl);
+
+                status.innerHTML = "Download iniciado ✅";
+
+            } catch (err) {
+                console.error(err);
+                status.innerHTML = "Erro ao baixar o vídeo ❌";
             }
-
-            status.innerHTML = "Baixando...";
-
-            const a = document.createElement("a");
-            a.href = data.videoUrl;
-            a.download = "reels.mp4";
-            a.click();
-
-            status.innerHTML = "Download iniciado!";
         }
 
         function openModal() {
