@@ -108,7 +108,7 @@
         });
 
         async function acordarBackend() {
-            const urlback = "https://instaafferre.onrender.com/health";
+            const urlback = "https://fastifybackinstaaferre.onrender.com/health";
             try {
                 const response = await fetch(urlback);
                 if (!response.ok) {
@@ -132,7 +132,7 @@
 
             try {
                 const res = await fetch(
-                    "https://instaafferre.onrender.com/api/download",
+                    "https://fastifybackinstaaferre.onrender.com/api/download",
                     {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
